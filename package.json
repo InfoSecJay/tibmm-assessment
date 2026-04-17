@@ -1,0 +1,13 @@
+{
+  "name": "tibmm-assessment",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Threat Intelligence Behavior Maturity Model — snapshot and trend report generators",
+  "scripts": {
+    "report": "node src/scorer/generate_report.js",
+    "trend": "node src/scorer/generate_trend.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}

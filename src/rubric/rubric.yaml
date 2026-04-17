@@ -1,0 +1,952 @@
+# Threat Intelligence Behavior Maturity Model (TIBMM) — Assessment Rubric
+# Sibling instrument to DEBMM. Tuned for a Canadian telco CTI function that
+# operates alongside a mature SOC with a small team (1-5 analysts) of varying
+# skill levels.
+#
+# Structure:
+#   - 5 Core Tiers (T0-T4) with 20 core criteria (4 per tier)
+#   - 2 Enrichment dimensions with 6 criteria (3 each)
+#   - Each criterion scored on 5 maturity levels (1-5)
+#
+# Synthesized from: CTI-CMM v1.3 (Intel471/community), CREST CTI-MAT Detailed
+# (Apr 2022), ThreatConnect TIMM, Mandiant ICD, Recorded Future TIMA, SANS
+# Intelligence Analyst's Playbook (CD_OSINT_02-26), ICD 203, TaHiTI, and
+# Canadian telco operational context (PIPEDA, CRTC, CASL, CCCS advisories,
+# CCTX, smishing/SIM swap/number-porting fraud patterns).
+
+maturity_levels:
+  1:
+    name: Initial
+    description: Minimal or no structured activity in this area; ad-hoc at best.
+  2:
+    name: Repeatable
+    description: Sporadic and inconsistent efforts; some awareness but no formal process.
+  3:
+    name: Defined
+    description: Regular, documented processes are in place and followed consistently.
+  4:
+    name: Managed
+    description: Comprehensive, integrated activities with measurable outcomes and stakeholder feedback loops.
+  5:
+    name: Optimized
+    description: Fully instrumented, continuously improving, and informing enterprise strategy.
+
+tiers:
+
+  # ============================================================
+  # TIER 0 — FOUNDATION: Role, Scope, and IOC Handling
+  # ============================================================
+  - id: tier_0
+    name: Foundation
+    description: >
+      The CTI function exists as a distinct capability with a known scope. Someone reads
+      threat reports, someone handles IOCs, and stakeholders know CTI is here. Without
+      these foundations, every higher tier is cosmetic.
+    criteria:
+
+      - id: mission_and_scope
+        name: Mission, Charter, and Service Catalog
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No documented mission, charter, or service catalog. CTI exists as a title
+              without a defined scope; stakeholders cannot consistently describe what
+              the team delivers.
+            quantitative: "No written charter; stakeholder descriptions diverge significantly."
+          2:
+            qualitative: >
+              An informal description of CTI's role exists (email thread, wiki page) but
+              is out of date, not signed off, and not socialized.
+            quantitative: "Informal 1-page description exists; <30% of named stakeholders have seen it."
+          3:
+            qualitative: >
+              A current CTI charter, mission, and service catalog are documented, approved
+              by the SOC/Security leader, and socialized to named stakeholders (SOC, DE,
+              IR at minimum).
+            quantitative: "Charter approved within last 12 months; service catalog lists >=3 service types."
+          4:
+            qualitative: >
+              Charter and catalog are reviewed annually with stakeholder input. Service
+              catalog maps to stakeholder RACI; requests flow through a documented intake.
+            quantitative: "Annual review on calendar; RACI defined; intake queue in ticketing system."
+          5:
+            qualitative: >
+              Charter is a living artifact. Service catalog is instrumented — usage per
+              service type is measured and feeds the next review. Charter referenced in
+              budget and headcount conversations.
+            quantitative: "Usage metrics per service type reported quarterly to leadership."
+
+      - id: ioc_handling
+        name: Indicator of Compromise Handling
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              IOCs arrive via email, chat, or vendor portal and are handled ad-hoc by
+              whoever notices. No triage, no enrichment, no routing convention.
+            quantitative: "No IOC queue; no record of IOCs acted on in the last 90 days."
+          2:
+            qualitative: >
+              IOCs are forwarded to SOC/threat hunting manually on a best-effort basis.
+              Some informal triage — at least obvious false positives are filtered.
+            quantitative: ">0 but no SLA; <50% of IOCs are enriched before handoff."
+          3:
+            qualitative: >
+              IOCs are triaged against a documented process (source, context, confidence),
+              enriched where useful, and routed to a named downstream owner (SIEM
+              watchlist, EDR, firewall, hunt queue).
+            quantitative: "Documented triage SOP; >=80% of IOCs carry source + confidence + disposition."
+          4:
+            qualitative: >
+              IOC handling is tracked in a TIP or ticketing system. Provenance, TLP,
+              expiration, and disposition are recorded. Stakeholder feedback (true/false
+              positive) is captured.
+            quantitative: "TIP or ticket-based tracking; >=90% capture disposition; feedback rate measured."
+          5:
+            qualitative: >
+              IOC handling is largely automated end-to-end: ingestion, enrichment,
+              scoring, deployment, expiration, and feedback. Analyst time is spent on
+              non-automatable judgment calls.
+            quantitative: ">=80% of IOC lifecycle automated; analyst review focused on exceptions only."
+
+      - id: source_inventory
+        name: Intelligence Source Inventory
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No list of subscribed feeds or sources exists. Knowledge of what the team
+              reads lives in individual analyst heads; turnover would lose most of it.
+            quantitative: "No written source list."
+          2:
+            qualitative: >
+              A basic list exists (spreadsheet or wiki) naming feeds and OSINT sources
+              the team uses, but ownership, cost, renewal date, and purpose are missing
+              or stale.
+            quantitative: "List exists; <50% of entries have owner + last-review date."
+          3:
+            qualitative: >
+              A source inventory is maintained with name, type (OSINT, commercial,
+              ISAC, government), owner, cost, renewal date, and short purpose
+              statement. Reviewed at least annually.
+            quantitative: ">=90% of sources have owner + purpose + review date."
+          4:
+            qualitative: >
+              Sources are evaluated for quality using a lightweight framework (CRAAP or
+              Admiralty-style rating). Low-value sources are retired. Gaps against
+              stakeholder needs are documented.
+            quantitative: "Documented source quality ratings; >=1 retirement or addition per year based on ROI."
+          5:
+            qualitative: >
+              Source ROI is measured against Priority Intelligence Requirements. Source
+              changes are tied to explicit business cases. Cost-per-useful-product is
+              tracked.
+            quantitative: "Source ROI metric tracked; inventory cross-referenced to PIRs."
+
+      - id: stakeholder_touchpoints
+        name: Stakeholder Awareness and Access
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              Stakeholder teams (SOC, Detection Engineering, Incident Response) cannot
+              consistently name a CTI contact or describe how to request support.
+              Engagement depends on individual relationships.
+            quantitative: "No stakeholder map; engagement is person-dependent."
+          2:
+            qualitative: >
+              CTI has informal relationships with at least one named stakeholder team
+              (typically SOC or IR). Ad-hoc meetings occur but are not scheduled.
+            quantitative: "1-2 stakeholder teams engaged; no recurring meeting cadence."
+          3:
+            qualitative: >
+              Named CTI points-of-contact are published for each stakeholder team (SOC,
+              DE, IR at minimum). Recurring check-ins exist with at least one stakeholder.
+            quantitative: ">=3 stakeholder teams have named POC; >=1 recurring cadence in place."
+          4:
+            qualitative: >
+              Recurring cadence with all primary stakeholders (SOC, DE, IR, VM). Each
+              cadence has a documented agenda and an owner. Intake and RFI paths are
+              known and used.
+            quantitative: ">=4 recurring cadences; agendas archived; RFIs logged."
+          5:
+            qualitative: >
+              Stakeholder satisfaction is measured (NPS or equivalent) on an annual
+              cycle. CTI adjusts cadence, products, and services based on stakeholder
+              feedback. New stakeholders are onboarded via a defined intake.
+            quantitative: "Annual NPS survey; documented onboarding; changes traceable to feedback."
+
+  # ============================================================
+  # TIER 1 — BASIC: Direction and Tradecraft Floor
+  # ============================================================
+  - id: tier_1
+    name: Basic
+    description: >
+      CTI operates from written Priority Intelligence Requirements, uses a consistent
+      product template with BLUF structure, applies calibrated probability language, and
+      rates sources for reliability. This is the analytic tradecraft floor required
+      before higher tiers become meaningful.
+    criteria:
+
+      - id: priority_intelligence_requirements
+        name: Priority Intelligence Requirements (PIRs)
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No PIRs exist. Collection and analysis are driven by whatever catches the
+              analyst's eye or whatever a stakeholder asked for most recently.
+            quantitative: "Zero written PIRs."
+          2:
+            qualitative: >
+              A legacy PIR deck exists but has not been reviewed in >12 months. Most
+              current collection cannot be traced back to it.
+            quantitative: "Stale PIRs; <30% of collection traceable to them."
+          3:
+            qualitative: >
+              A current set of 6-12 PIRs is documented, each with a named stakeholder
+              and a business question. Reviewed at least annually with stakeholder input.
+            quantitative: "6-12 PIRs, each with stakeholder + question; <=12 months since last review."
+          4:
+            qualitative: >
+              PIRs are decomposed into Specific Intelligence Requirements (SIRs).
+              Coverage against PIRs is measured. Gaps are tracked and addressed.
+            quantitative: ">=80% of PIRs decomposed to SIRs; PIR coverage rate tracked."
+          5:
+            qualitative: >
+              PIR development follows a documented process with stakeholder workshops,
+              risk-register alignment, and explicit retirement of expired PIRs. PIR
+              lifecycle metrics reported to leadership.
+            quantitative: "Documented PIR lifecycle; retirement list; quarterly metric report."
+
+      - id: product_template_bluf
+        name: Product Template and BLUF Structure
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No product template. Reports vary widely in structure; BLUF is absent
+              or buried. Analysts each produce their own format.
+            quantitative: "No template; <20% of products begin with a key judgment."
+          2:
+            qualitative: >
+              A template exists but is inconsistently applied. BLUF is sometimes
+              present but is frequently confused with an executive summary.
+            quantitative: "Template exists; <60% of products conform."
+          3:
+            qualitative: >
+              All finished products conform to a template that begins with a BLUF
+              (bottom line up front) with key judgments. Evidence, analysis,
+              implications, and outlook are distinct sections.
+            quantitative: ">=90% of products conform; BLUF is the first paragraph in every product."
+          4:
+            qualitative: >
+              Template includes alternatives considered and customer-relevance
+              section. Template is version-controlled; changes go through analyst
+              review.
+            quantitative: "Template versioned; alternatives section present in >=80% of products."
+          5:
+            qualitative: >
+              Template structure is a trained tradecraft expectation. Deviations are
+              caught in peer review. Template is benchmarked against ICD 203 standards.
+            quantitative: "ICD 203 mapping documented; peer review catches template deviations."
+
+      - id: calibrated_language
+        name: Calibrated Language and Source Reliability
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              Analysts use undefined probability terms ("possible", "probable", "likely")
+              interchangeably. Sources are not rated. Confidence is implicit.
+            quantitative: "No calibrated scale; no source reliability ratings."
+          2:
+            qualitative: >
+              Team is aware of calibrated probability language and Admiralty/NATO-style
+              source rating but applies them inconsistently across products.
+            quantitative: "<50% of judgments carry explicit confidence language or source rating."
+          3:
+            qualitative: >
+              All key judgments use calibrated probability language (e.g., the 8-level
+              ODNI scale from "almost certain" down to "remote"). Sources are rated
+              for reliability (A-F) and information credibility (1-6).
+            quantitative: ">=90% of key judgments have calibrated language; >=90% of sources rated."
+          4:
+            qualitative: >
+              Template enforces calibrated language and source rating. Team references
+              the ICD 203 nine standards in peer review. Deviations are flagged.
+            quantitative: "Peer review checklist references ICD 203; deviations tracked."
+          5:
+            qualitative: >
+              Forecast calibration is measured: statements labeled "likely (70-84%)"
+              come true roughly 70-84% of the time when aggregated. Miscalibration
+              drives retraining.
+            quantitative: "Brier score or equivalent tracked for forecasts; retraining cadence defined."
+
+      - id: collection_management
+        name: Collection Management Framework (CMF)
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No Collection Management Framework exists. No mapping between what is
+              collected and what PIRs or questions it is meant to answer.
+            quantitative: "No CMF."
+          2:
+            qualitative: >
+              An informal CMF draft exists (often in a spreadsheet) listing feeds
+              against topics but without PIR traceability.
+            quantitative: "Draft CMF; <30% of sources mapped to PIRs."
+          3:
+            qualitative: >
+              A CMF is documented that maps each source to the PIRs and SIRs it is
+              intended to support. Coverage gaps are visible.
+            quantitative: ">=80% of sources mapped to at least one PIR; gap list maintained."
+          4:
+            qualitative: >
+              CMF is reviewed quarterly; gaps drive source addition/retirement
+              decisions. Sources are CRAAP-evaluated and tagged for collection
+              technique (passive vs. active).
+            quantitative: "Quarterly CMF review; CRAAP ratings on >=80% of sources."
+          5:
+            qualitative: >
+              CMF drives an explicit collection plan per PIR. Source cost, coverage,
+              and ROI are tracked; decisions are defensible to leadership and auditors.
+            quantitative: "Collection plan per PIR; ROI metric per source."
+
+  # ============================================================
+  # TIER 2 — OPERATIONAL: SOC / DE / IR / Hunt Integration
+  # ============================================================
+  - id: tier_2
+    name: Operational
+    description: >
+      A Threat Intelligence Platform (or equivalent) is in place; IOC flow to SIEM
+      and EDR is automated; Detection Engineering handoff is scheduled; CTI partners
+      with the dedicated Threat Hunting team on a cadence; and Incident Response is
+      enriched with CTI context on every incident. This is where CTI becomes visible
+      in day-to-day SOC operations.
+    criteria:
+
+      - id: tip_and_ioc_pipeline
+        name: Threat Intelligence Platform and IOC Pipeline
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No TIP. IOCs live in spreadsheets, emails, or SIEM watchlists updated
+              by hand. No systematic ingestion, enrichment, or expiration.
+            quantitative: "No TIP; manual IOC management."
+          2:
+            qualitative: >
+              A TIP (OpenCTI, MISP, ThreatConnect, Anomali, Recorded Future, etc.) is
+              deployed but underutilized. Some feeds ingested; manual export to SIEM.
+            quantitative: "TIP in place; <50% of feeds ingested; manual SIEM push."
+          3:
+            qualitative: >
+              TIP ingests multiple feeds via STIX/TAXII or API. Indicators are
+              enriched on ingestion, tagged with TLP and source, and pushed to the
+              SIEM via automation. IOC expiration is automated.
+            quantitative: ">=5 feeds automated; SIEM push via API; expiration policy configured."
+          4:
+            qualitative: >
+              Closed-loop feedback: SOC triage verdicts (true/false positive) flow
+              back to TIP and adjust source fidelity scoring. Low-fidelity indicators
+              are deprioritized; high-fidelity can trigger SOAR-based blocking.
+            quantitative: "SOC feedback pipeline in production; source scoring adjusts based on verdicts."
+          5:
+            qualitative: >
+              TIP is the single source of truth for indicators across SIEM, EDR,
+              SOAR, and firewalls. TIP analytics (pivoting, relationship graphs) are
+              part of the analyst workflow. Pipeline health is monitored.
+            quantitative: "TIP is single source of truth; analyst pivoting in TIP standard; pipeline SLOs tracked."
+
+      - id: detection_engineering_handoff
+        name: Detection Engineering Handoff
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              CTI and Detection Engineering interact ad-hoc. Detection requests are
+              verbal or email; no backlog, no tracking, no provenance once rules ship.
+            quantitative: "No shared backlog; no rule-level CTI provenance."
+          2:
+            qualitative: >
+              CTI submits occasional detection requests but without a template. DE
+              sometimes responds; no formal cadence.
+            quantitative: "<1 formal request per month; no cadence."
+          3:
+            qualitative: >
+              Monthly (or more frequent) CTI-to-DE cadence. Requests use a standard
+              template (threat, TTP, ATT&CK ID, suggested logic). CTI-originated
+              requests are tracked through the DE pipeline.
+            quantitative: ">=1 cadence per month; template in use; backlog visible to both teams."
+          4:
+            qualitative: >
+              CTI-driven detections are tagged in the Detection-as-Code repository
+              with PIR/CTI source references. Rule hit rate and false-positive rate
+              are measured against CTI-driven rules.
+            quantitative: "CTI tag applied in DaC repo; hit rate / FP rate metrics produced."
+          5:
+            qualitative: >
+              Lead time from CTI request to deployed detection is measured. ATT&CK
+              coverage driven by CTI inputs is mapped from the detection repo. CTI
+              influences DE roadmap at planning meetings.
+            quantitative: "Lead-time metric reported; ATT&CK coverage map auto-generated."
+
+      - id: threat_hunting_integration
+        name: Collaboration with the Threat Hunting Team
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No working relationship with the dedicated Threat Hunting team. CTI
+              does not feed hunt ideas; hunt findings do not flow back to CTI.
+            quantitative: "No cadence or structured handoff; hunt team operates without CTI input."
+          2:
+            qualitative: >
+              Informal, ad-hoc interaction when an analyst from either side reaches
+              out. CTI occasionally emails an IOC or actor name to the hunt team;
+              findings rarely come back.
+            quantitative: "<1 structured intel-to-hunt handoff per month; no return feedback path."
+          3:
+            qualitative: >
+              A recurring CTI-to-Hunt cadence exists (at least monthly). CTI submits
+              hunt hypothesis abstracts to the hunt backlog, scoped against PIRs and
+              MITRE ATT&CK. Hunts target the upper tiers of the Pyramid of Pain
+              (TTPs and tools) using CTI-provided adversary packages.
+            quantitative: ">=1 CTI-to-Hunt cadence per month; >=3 CTI-submitted hunt abstracts per quarter."
+          4:
+            qualitative: >
+              Hunt findings flow back to CTI on a defined path and update the threat
+              profile, PIRs, and the Collection Management Framework. CTI provides
+              enriched intel views (actor, campaign, Diamond Model, ATT&CK Navigator
+              layers) to scope active hunts. TaHiTI-style three-phase flow is
+              followed end-to-end.
+            quantitative: ">=80% of hunts scoped with a CTI package; documented return-feedback path in use."
+          5:
+            qualitative: >
+              CTI-Hunt partnership is measured: % of hunts sourced by CTI, % of
+              hunts producing a traceable downstream CTI or detection artifact, and
+              lessons-learned retrospectives on cadence. PIRs and the CMF are
+              routinely updated based on hunt findings.
+            quantitative: "CTI-Hunt KPIs reported quarterly; measurable improvement in hunt yield year-over-year."
+
+      - id: incident_response_enrichment
+        name: Incident Response Enrichment
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              CTI is not systematically engaged during incidents. IR analysts search
+              for context themselves; CTI may contribute if asked.
+            quantitative: "CTI involvement in <30% of major incidents."
+          2:
+            qualitative: >
+              CTI provides enrichment when asked. Post-incident, CTI sometimes adds
+              context to the report.
+            quantitative: "Ad-hoc enrichment; not tracked; no SLA."
+          3:
+            qualitative: >
+              Every incident ticket above a defined severity is enriched with CTI
+              context (known actor / TTPs / campaign / prior observations). A named
+              CTI liaison supports IR on-call.
+            quantitative: ">=90% of high-sev incidents enriched; on-call liaison named."
+          4:
+            qualitative: >
+              Enrichment is automated via TIP/SOAR on ticket creation. Incident TTPs
+              are mapped to ATT&CK and the Diamond Model. Post-incident, CTI
+              contributes to lessons-learned.
+            quantitative: "Automated enrichment in production; ATT&CK mapping on >=80% of IR cases."
+          5:
+            qualitative: >
+              CTI-driven post-incident assessments produce updates to PIRs, detection
+              backlog, and threat profile. Incident contribution metrics (MTTD/MTTR
+              improvement) are tracked where measurable.
+            quantitative: "Post-incident CTI output traceable to downstream changes; MTTR attribution measured."
+
+  # ============================================================
+  # TIER 3 — ADVANCED: Telco-Specific Stakeholder Support + Measurement
+  # ============================================================
+  - id: tier_3
+    name: Advanced
+    description: >
+      CTI produces specialized intelligence for telco-context stakeholders
+      (Vulnerability Management, Fraud, Third-Party Risk) and delivers a recurring
+      Cyber Threat Landscape product at strategic/operational/tactical tiers. Outcome
+      metrics are defined and reported.
+    criteria:
+
+      - id: vulnerability_and_exploit_intel
+        name: Vulnerability and Exploit Intelligence
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No vulnerability intelligence contribution to Vulnerability Management.
+              VM prioritizes on CVSS alone.
+            quantitative: "No CTI input to VM prioritization."
+          2:
+            qualitative: >
+              Ad-hoc alerts on viral CVEs (the "log4j moment" pattern). No cadence.
+              No telco-stack specificity.
+            quantitative: "Reactive CVE alerts; no cadence; no telco-stack tagging."
+          3:
+            qualitative: >
+              Bi-weekly or monthly vulnerability intelligence brief to VM covering
+              newly-disclosed CVEs relevant to the telco technology stack (RAN, core,
+              transport, billing/OSS/BSS, hyperscaler, CPE).
+            quantitative: "Recurring VM brief; telco-tech tagging applied."
+          4:
+            qualitative: >
+              EPSS, exploit-in-the-wild observation, and underground chatter are
+              integrated. CTI-contributed score modifiers feed VM prioritization.
+              Telco-specific protocol vulns (SS7, Diameter, GTP, 5G) are tracked.
+            quantitative: "EPSS + exploit-observation inputs in VM; telco protocol coverage documented."
+          5:
+            qualitative: >
+              CTI-driven risk scoring is the primary VM prioritization signal for
+              externally-facing assets. Predictive advisories issued ahead of public
+              disclosure where responsibly possible. Post-patch verification tracked.
+            quantitative: "CTI score weighted >=30% of VM prioritization; predictive advisories issued."
+
+      - id: telco_fraud_intel
+        name: Telco Fraud Intelligence
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No intelligence contribution to the Fraud team on smishing, SIM swap,
+              number porting abuse, account takeover, or brand impersonation.
+            quantitative: "No Fraud engagement."
+          2:
+            qualitative: >
+              Occasional sharing of smishing samples or actor names when they surface
+              in OSINT. No cadence; no partnership.
+            quantitative: "Occasional, reactive sharing; no agreed intake."
+          3:
+            qualitative: >
+              A recurring cadence exists with the Fraud team covering smishing kits,
+              SIM swap campaigns, account-takeover tooling, number-porting abuse,
+              and brand impersonation domains. Intake for Fraud RFIs is defined.
+            quantitative: "Recurring Fraud cadence; RFI intake documented; telco-fraud category coverage >=5."
+          4:
+            qualitative: >
+              CTI feeds automate detection of brand impersonation (domain squatting,
+              malvertising, lookalike apps). Smishing kits are collected and analyzed;
+              indicators flow to SOC and Fraud detection.
+            quantitative: "Automated brand monitoring; smishing kit repository maintained."
+          5:
+            qualitative: >
+              CTI participates in cross-carrier intelligence sharing (ISAC/trust
+              group) on fraud actors. Takedown or disruption actions are initiated;
+              fraud prevention dollar impact attributed where possible.
+            quantitative: "Cross-carrier sharing in production; takedown cadence; $ impact captured."
+
+      - id: third_party_and_supply_chain
+        name: Third-Party and Supply-Chain Intelligence
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No third-party monitoring. Vendor and partner exposure is invisible to CTI.
+            quantitative: "No TPRM engagement."
+          2:
+            qualitative: >
+              Occasional intelligence on major vendor breaches when they hit the news
+              cycle. No list of monitored third parties; no cadence.
+            quantitative: "Reactive; no monitored vendor list."
+          3:
+            qualitative: >
+              A list of the top 20-50 third parties (equipment vendors, roaming
+              partners, CPE suppliers, cloud/SaaS providers, interconnect carriers)
+              is monitored on a recurring cadence. Breach alerts route to TPRM.
+            quantitative: "Top-N vendor list exists; recurring TPRM brief; breach intake path documented."
+          4:
+            qualitative: >
+              TPRM platform integration (or structured handoff) enables automated
+              vendor-breach alerting. Supply-chain compromise indicators are tracked.
+              Geopolitical shifts affecting critical vendors are surfaced.
+            quantitative: "Automated alerts to TPRM; supply-chain IOC tracking active."
+          5:
+            qualitative: >
+              CTI supports M&A / procurement due diligence with cyber-threat exposure
+              assessments. Roaming and interconnect partner risks inform network
+              segmentation decisions.
+            quantitative: "CTI input on >=50% of material procurement decisions; roaming risk report annual."
+
+      - id: threat_landscape_reporting
+        name: Cyber Threat Landscape Reporting
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No recurring threat landscape product. When asked "what are the current
+              threats to us", the answer varies by analyst.
+            quantitative: "No recurring CTL product."
+          2:
+            qualitative: >
+              Occasional one-off threat reports produced on demand. No cadence, no
+              consistent structure, no strategic/operational/tactical tiering.
+            quantitative: "Irregular CTL reports; <4 per year."
+          3:
+            qualitative: >
+              Monthly or quarterly Cyber Threat Landscape report delivered on a
+              published schedule, following ENISA-style methodology. Tactical IOCs,
+              operational campaigns, and strategic trends are distinguishable.
+            quantitative: "Recurring CTL >=quarterly; on-cadence >=90%."
+          4:
+            qualitative: >
+              CTL covers strategic/operational/tactical tiers against a defined
+              audience for each. Stakeholder feedback is solicited and logged.
+              Trends across CTL editions are tracked.
+            quantitative: "Tiered audiences defined; feedback captured; trend view maintained."
+          5:
+            qualitative: >
+              Strategic CTL informs CISO/CIO risk decisions; operational CTL informs
+              hunt and detection backlogs; tactical CTL feeds SIEM/EDR. Annual CTL
+              retrospective identifies forecast hits and misses.
+            quantitative: "CTL decisions attributable to downstream actions; annual retrospective published."
+
+  # ============================================================
+  # TIER 4 — LEADING: Strategic, Anticipatory, and Continuously Improving
+  # ============================================================
+  - id: tier_4
+    name: Leading
+    description: >
+      Strategic intelligence reaches the CISO and board on cadence; Structured
+      Analytic Techniques are standard practice; CTI-attributable outcomes are
+      measured; forecast calibration is tracked. The function defends its value at
+      budget review with evidence rather than narrative.
+    criteria:
+
+      - id: strategic_intelligence_to_leadership
+        name: Strategic Intelligence to Leadership
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              CTI does not engage with CISO or senior security leadership on a
+              scheduled basis. Strategic context for the enterprise is absent.
+            quantitative: "No strategic briefing cadence."
+          2:
+            qualitative: >
+              CTI contributes to the CISO deck occasionally when asked. No standing
+              strategic product.
+            quantitative: "Ad-hoc CISO contribution; no recurring strategic brief."
+          3:
+            qualitative: >
+              A quarterly strategic intelligence brief is produced for the CISO and
+              relevant senior leaders (CIO, risk, fraud). Written in non-technical
+              language with clear implications for the enterprise.
+            quantitative: "Quarterly strategic brief delivered on schedule."
+          4:
+            qualitative: >
+              Strategic intelligence informs enterprise risk register updates and
+              security-investment decisions. Regulator-adjacent context (CRTC, CCCS,
+              Bill C-26) is synthesized and briefed.
+            quantitative: "Strategic brief referenced in risk register changes and investment decisions."
+          5:
+            qualitative: >
+              CTI is a standing input to annual enterprise strategy and board-level
+              cyber-risk discussions. Strategic products survive scrutiny by external
+              auditors and regulators.
+            quantitative: "Standing board-cycle engagement; external review on cadence."
+
+      - id: structured_analytic_techniques
+        name: Structured Analytic Techniques (SATs)
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              Analysts are unfamiliar with Structured Analytic Techniques (Analysis
+              of Competing Hypotheses, Key Assumptions Check, Pre-Mortem, Devil's
+              Advocacy, Red Team Analysis).
+            quantitative: "No SAT training; no SAT artifacts."
+          2:
+            qualitative: >
+              Analysts are aware of SATs conceptually but rarely apply them in
+              finished products. No expectation of SAT use.
+            quantitative: "<10% of major products use a SAT."
+          3:
+            qualitative: >
+              At least one SAT is applied per major product (high-impact assessment,
+              attribution claim, or strategic forecast). Analysts are trained.
+            quantitative: ">=80% of major products show explicit SAT application."
+          4:
+            qualitative: >
+              Multiple SATs are in the team's repertoire. SAT selection is guided by
+              the analytic question. Peer review checks for appropriate SAT use.
+            quantitative: "Team repertoire >=4 SATs; peer review checklist includes SAT."
+          5:
+            qualitative: >
+              SATs are a trained competency; cognitive-bias countermeasures are part
+              of the analytic culture. Lessons from SAT-driven decisions feed future
+              products.
+            quantitative: "Annual SAT refresher; bias countermeasure tracking in retrospectives."
+
+      - id: attributable_outcomes
+        name: Attributable Outcomes and Impact Metrics
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              CTI cannot point to specific detections, hunts, incidents, or risk
+              decisions that were driven by its products.
+            quantitative: "No outcome attribution."
+          2:
+            qualitative: >
+              A few anecdotes exist ("we caught X because of CTI") but are not
+              tracked or aggregated.
+            quantitative: "Anecdotal; not captured systematically."
+          3:
+            qualitative: >
+              An outcome log is maintained: detections, hunts, incidents, risk
+              register changes, and procurement decisions with CTI attribution are
+              captured. Monthly review.
+            quantitative: "Outcome log in place; >=5 captured outcomes per quarter."
+          4:
+            qualitative: >
+              Outcome metrics (% of new detections attributable to CTI, MTTR
+              reduction attributed to CTI, fraud $ prevented, vendor changes driven
+              by CTI) are reported quarterly to leadership.
+            quantitative: "Outcome KPIs in quarterly leadership pack."
+          5:
+            qualitative: >
+              Outcome data feeds budget and headcount decisions. CTI function
+              defends its spend with attributable value; investment-versus-outcome
+              ratios are tracked.
+            quantitative: "Budget justification uses outcome data; ROI metric published."
+
+      - id: forecast_calibration
+        name: Forecast Calibration
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              Forecasts are not tracked. Analysts make judgments with confidence
+              labels but there is no retrospective check on whether they were right.
+            quantitative: "No forecast log."
+          2:
+            qualitative: >
+              Occasional retrospective on major assessments but no systematic
+              tracking of calibration.
+            quantitative: "Ad-hoc retrospective only."
+          3:
+            qualitative: >
+              All forecasts with confidence statements are logged with resolution
+              criteria. Resolved forecasts are reviewed quarterly.
+            quantitative: "Forecast log >=90% of finished products; quarterly review."
+          4:
+            qualitative: >
+              Calibration score (Brier score or equivalent) is computed for the
+              analytic team. Calibration errors drive retraining or process changes.
+            quantitative: "Calibration metric tracked per analyst / team."
+          5:
+            qualitative: >
+              Calibration is reported alongside output metrics. Team targets a
+              demonstrable improvement in calibration year-over-year.
+            quantitative: "YoY calibration improvement target; reported in annual review."
+
+  # ============================================================
+  # ENRICHMENT D1 — TRADECRAFT AND ANALYST CAPABILITY
+  # ============================================================
+  - id: enrichment_tradecraft
+    name: "Enrichment: Tradecraft and Analyst Capability"
+    description: >
+      Cross-cutting analytic quality factors. These contribute to the overall score
+      but do not affect tier determination. A low score here predicts fragility at
+      higher tiers — structural integration without tradecraft is brittle.
+    criteria:
+
+      - id: icd203_adherence
+        name: ICD 203 Analytic Standards Adherence
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              Team is unfamiliar with ICD 203's nine analytic tradecraft standards.
+            quantitative: "No ICD 203 training."
+          2:
+            qualitative: >
+              Team lead is aware of ICD 203 but has not cascaded training to analysts.
+            quantitative: "Awareness at lead level only."
+          3:
+            qualitative: >
+              All analysts have received ICD 203 training (or equivalent SANS
+              playbook-grounded training). Products are spot-checked for adherence.
+            quantitative: "100% analyst training; spot-check cadence."
+          4:
+            qualitative: >
+              Peer review checklist explicitly references ICD 203 standards 1-7 as
+              pass gates on finished products.
+            quantitative: "Checklist uses ICD 203 standards 1-7 as gates."
+          5:
+            qualitative: >
+              ICD 203 standard 8 (accurate judgments over time) is measured via
+              forecast calibration. Standard 9 (effective visuals) is reviewed in peer review.
+            quantitative: "All 9 standards reviewed or measured."
+
+      - id: framework_literacy
+        name: Framework Literacy (ATT&CK, Diamond, Kill Chain)
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              Analysts cannot confidently use MITRE ATT&CK, the Diamond Model, or
+              the Cyber Kill Chain in analysis.
+            quantitative: "<50% analyst fluency."
+          2:
+            qualitative: >
+              Analysts reference ATT&CK IDs occasionally but do not use Diamond or
+              Kill Chain in products.
+            quantitative: "ATT&CK referenced; other frameworks rare."
+          3:
+            qualitative: >
+              All finished products involving adversary behavior use ATT&CK tactic
+               and technique IDs. Diamond and Kill Chain applied where appropriate.
+            quantitative: ">=90% of behavioral products use ATT&CK."
+          4:
+            qualitative: >
+              ATT&CK Navigator layers are produced for major campaigns / actors
+              tracked. Diamond Model diagrams appear in incident and campaign
+              reports.
+            quantitative: "ATT&CK layers published; Diamond diagrams in use."
+          5:
+            qualitative: >
+              Framework outputs feed detection coverage mapping and hunt
+              prioritization. ATT&CK heatmap is a living view linked to PIRs.
+            quantitative: "Live ATT&CK coverage heatmap linked to PIRs."
+
+      - id: peer_review_process
+        name: Peer Review Process
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No peer review. Analysts self-publish finished products.
+            quantitative: "Zero peer review."
+          2:
+            qualitative: >
+              Informal peer review is "happening" but not documented and not
+              universally applied.
+            quantitative: "<50% of products peer-reviewed."
+          3:
+            qualitative: >
+              All finished products receive at least one peer review before
+               release. Reviewer is named; review criteria are documented.
+            quantitative: ">=90% reviewed; named reviewer; written criteria."
+          4:
+            qualitative: >
+              Review uses a checklist tied to ICD 203, template adherence,
+              calibrated language, and source rating. Review turnaround is tracked.
+            quantitative: "Checklist in use; review SLA tracked."
+          5:
+            qualitative: >
+              Peer review is a learning loop: common review findings feed training
+              and template improvements. Cross-team review with detection engineering
+              or adjacent CTI teams happens on cadence.
+            quantitative: "Review findings drive training; cross-team review cadence."
+
+  # ============================================================
+  # ENRICHMENT D2 — GOVERNANCE, LEGAL, ETHICS, AND IMPROVEMENT
+  # ============================================================
+  - id: enrichment_governance
+    name: "Enrichment: Governance, Legal, Ethics, and Improvement"
+    description: >
+      Program hygiene that keeps the function defensible to regulators, partners,
+      and internal audit — and ensures it improves over time rather than drifting.
+      Contributes to overall score but not to tier determination.
+    criteria:
+
+      - id: legal_regulatory_review
+        name: Legal and Regulatory Review (PIPEDA, CASL, CRTC)
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No review of CTI sources or techniques against Canadian legal /
+              regulatory constraints (PIPEDA, CASL, CRTC, Bill C-26 CCSPA).
+            quantitative: "No legal review."
+          2:
+            qualitative: >
+              Team is aware of key constraints; individual analysts self-check but
+              no formal process.
+            quantitative: "Awareness-level only."
+          3:
+            qualitative: >
+              Sources are screened against PIPEDA for collection of personal
+              information. Active-collection techniques (e.g., interacting with
+              criminal forums) have documented legal sign-off.
+            quantitative: "Source screening documented; active-collection sign-off on file."
+          4:
+            qualitative: >
+              Annual review with privacy/legal partners on CTI practices. Passive
+              versus active collection posture is written and approved.
+            quantitative: "Annual legal review; written collection posture."
+          5:
+            qualitative: >
+              Regulatory alignment tracked over time (Bill C-26 CCSPA obligations,
+              CRTC cybersecurity expectations). CTI contributes to breach-
+              notification and regulatory reporting workflows.
+            quantitative: "CTI named in breach-notification workflow; regulatory tracking table maintained."
+
+      - id: external_sharing
+        name: External Sharing and Trust-Group Participation
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              Team does not participate in any external sharing community.
+            quantitative: "No memberships."
+          2:
+            qualitative: >
+              Passive membership in one or two groups (CCTX, vendor ISAC, etc.) but
+              no active sharing.
+            quantitative: "1-2 memberships; no shares in last 12 months."
+          3:
+            qualitative: >
+              Active membership in CCTX and/or relevant trust groups (carriers,
+              CCCS partnership). Sharing occurs on a cadence; TLP and sharing
+              constraints are understood and applied.
+            quantitative: ">=1 active sharing community; shares per quarter."
+          4:
+            qualitative: >
+              Bi-directional sharing is material: CTI contributes actor TTPs,
+              receives peer intelligence, and attributes downstream value from
+              partner contributions.
+            quantitative: ">=1 share per month; partner-attributable value captured."
+          5:
+            qualitative: >
+              CTI is a recognized contributor to telco-sector intelligence
+              communities; leadership role (working group chair, framework author, or
+              similar) held.
+            quantitative: "Working-group leadership role; sector-recognized contributions."
+
+      - id: continuous_improvement
+        name: Continuous Improvement and Self-Assessment
+        weight: 1.0
+        levels:
+          1:
+            qualitative: >
+              No self-assessment cadence. The team does not measure its own maturity.
+            quantitative: "No assessment in last 24 months."
+          2:
+            qualitative: >
+              A prior maturity assessment was done once and not repeated.
+            quantitative: "One-off assessment; no cadence."
+          3:
+            qualitative: >
+              TIBMM (or equivalent) self-assessment runs at least annually. Gaps
+               are captured and tracked.
+            quantitative: "Annual TIBMM run; gap list maintained."
+          4:
+            qualitative: >
+              Bi-annual full TIBMM assessment plus quarterly KPI check-ins. Gaps
+               tie to a roadmap with owners and target dates.
+            quantitative: "Bi-annual TIBMM + quarterly KPIs; tracked roadmap."
+          5:
+            qualitative: >
+              TIBMM scores are reported to leadership alongside operational KPIs.
+              Year-over-year trend is visible; improvement targets are committed.
+            quantitative: "YoY trend reported; improvement target committed."

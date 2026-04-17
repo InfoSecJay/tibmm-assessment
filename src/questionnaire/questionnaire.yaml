@@ -1,0 +1,486 @@
+# TIBMM Assessment Questionnaire
+# Questions map to the 26 rubric criteria across 5 core tiers + 2 enrichment
+# dimensions. All questions are dropdowns: scale (1-5) or checklist (Yes/No).
+# No free-text required on the Assessment tab; evidence field is provided in
+# audit mode only.
+#
+# Question types:
+#   scale     - 1-5 maturity self-rating (scored directly)
+#   checklist - yes/no (scored: yes=yes_value, no=1)
+#
+# Each question has self and audit phrasings (self: "your team"; audit:
+# "the assessed team"). Quantitative thresholds from the rubric are embedded
+# directly in scale option labels so the assessor is never ambiguous.
+
+questions:
+
+  # ============================================================
+  # TIER 0 — FOUNDATION
+  # ============================================================
+
+  # --- Mission, Charter, and Service Catalog ---
+  - id: T0-Q1
+    tier: 0
+    criterion: mission_and_scope
+    type: scale
+    question: "Rate the maturity of your CTI team's charter, mission, and service catalog."
+    question_audit: "Rate the maturity of the assessed CTI team's charter, mission, and service catalog."
+    options:
+      1: "No written charter or service catalog; stakeholder descriptions of CTI's role diverge significantly"
+      2: "Informal 1-page description exists; not signed off, not socialized (<30% of stakeholders have seen it)"
+      3: "Current charter approved in the last 12 months; service catalog lists at least 3 service types; stakeholders can describe what CTI delivers"
+      4: "Annual review on calendar; RACI defined with stakeholders; intake queue lives in a ticketing system"
+      5: "Service-level usage metrics reported quarterly; charter referenced in budget and headcount conversations"
+
+  - id: T0-Q2
+    tier: 0
+    criterion: mission_and_scope
+    type: checklist
+    question: "Does your CTI team have a published service catalog naming the products and services it delivers?"
+    question_audit: "Does the assessed team have a published service catalog naming products and services?"
+    scoring:
+      yes_value: 3
+
+  # --- IOC Handling ---
+  - id: T0-Q3
+    tier: 0
+    criterion: ioc_handling
+    type: scale
+    question: "Rate the maturity of your team's Indicator of Compromise (IOC) handling."
+    question_audit: "Rate the maturity of the assessed team's IOC handling."
+    options:
+      1: "No queue; IOCs handled ad-hoc by whoever notices; no record of IOCs actioned in the last 90 days"
+      2: "Manual forwarding to SOC or hunt on best-effort basis; <50% enriched before handoff"
+      3: "Documented triage SOP; >=80% of IOCs carry source, confidence, and disposition; named downstream owners"
+      4: "TIP or ticket-based tracking; >=90% capture disposition; true/false-positive feedback rate measured"
+      5: ">=80% of IOC lifecycle automated (ingest, enrich, score, deploy, expire); analyst attention on exceptions only"
+
+  - id: T0-Q4
+    tier: 0
+    criterion: ioc_handling
+    type: checklist
+    question: "Are all inbound IOCs captured in a tracking system (TIP, ticket queue, or equivalent) rather than email?"
+    question_audit: "Are inbound IOCs captured in a tracking system rather than email?"
+    scoring:
+      yes_value: 3
+
+  # --- Intelligence Source Inventory ---
+  - id: T0-Q5
+    tier: 0
+    criterion: source_inventory
+    type: scale
+    question: "Rate the completeness of your intelligence source inventory."
+    question_audit: "Rate the completeness of the assessed team's intelligence source inventory."
+    options:
+      1: "No written source list; subscribed feeds live in individual analyst heads"
+      2: "Spreadsheet or wiki list exists; <50% of entries have an owner and last-review date"
+      3: ">=90% of sources have owner, purpose, cost, renewal, and review date; inventory reviewed at least annually"
+      4: "Sources rated for quality (CRAAP or Admiralty-style); low-value sources retired; gap list maintained"
+      5: "Source ROI measured against PIRs; changes tied to explicit business cases; cost-per-useful-product tracked"
+
+  # --- Stakeholder Awareness and Access ---
+  - id: T0-Q6
+    tier: 0
+    criterion: stakeholder_touchpoints
+    type: scale
+    question: "Rate how well your stakeholder teams (SOC, DE, IR, VM) can engage CTI."
+    question_audit: "Rate how well stakeholders can engage the assessed team."
+    options:
+      1: "Stakeholders cannot consistently name a CTI contact; engagement is person-dependent"
+      2: "Informal relationships with 1-2 stakeholder teams; no recurring cadence"
+      3: "Named POCs published for SOC, DE, IR; at least one recurring cadence in place"
+      4: ">=4 recurring stakeholder cadences with agendas; RFI path used and logged"
+      5: "Annual NPS (or equivalent) measured; cadence and services adjusted based on feedback; new stakeholders onboarded via defined intake"
+
+  # ============================================================
+  # TIER 1 — BASIC: Direction and Tradecraft Floor
+  # ============================================================
+
+  # --- Priority Intelligence Requirements (PIRs) ---
+  - id: T1-Q1
+    tier: 1
+    criterion: priority_intelligence_requirements
+    type: scale
+    question: "Rate the maturity of your Priority Intelligence Requirements (PIRs)."
+    question_audit: "Rate the maturity of the assessed team's PIRs."
+    options:
+      1: "No PIRs; collection driven by whatever catches analyst attention"
+      2: "Legacy PIR deck exists but not reviewed in >12 months; <30% of current collection traces to it"
+      3: "6-12 current PIRs documented, each with named stakeholder and business question; reviewed within the last 12 months"
+      4: ">=80% of PIRs decomposed into Specific Intelligence Requirements (SIRs); PIR coverage rate tracked"
+      5: "Documented PIR lifecycle with stakeholder workshops, risk-register alignment, retirement list, and quarterly metrics"
+
+  - id: T1-Q2
+    tier: 1
+    criterion: priority_intelligence_requirements
+    type: checklist
+    question: "Does every major CTI product cite at least one PIR it supports?"
+    question_audit: "Does every major product cite at least one PIR?"
+    scoring:
+      yes_value: 3
+
+  # --- Product Template and BLUF Structure ---
+  - id: T1-Q3
+    tier: 1
+    criterion: product_template_bluf
+    type: scale
+    question: "Rate the consistency of your product template and use of BLUF structure."
+    question_audit: "Rate the assessed team's product template and BLUF use."
+    options:
+      1: "No template; reports vary widely; BLUF absent or buried"
+      2: "Template exists but <60% of products conform; BLUF often confused with executive summary"
+      3: ">=90% of products conform; BLUF is the first paragraph with key judgments; distinct evidence/analysis/implications sections"
+      4: "Template includes alternatives considered and customer-relevance; version-controlled; analyst-reviewed changes"
+      5: "Template benchmarked against ICD 203; peer review catches deviations; trained competency"
+
+  # --- Calibrated Language and Source Reliability ---
+  - id: T1-Q4
+    tier: 1
+    criterion: calibrated_language
+    type: scale
+    question: "Rate your use of calibrated probability language and source reliability ratings."
+    question_audit: "Rate the assessed team's use of calibrated language and source ratings."
+    options:
+      1: "No calibrated scale; no source reliability ratings; confidence is implicit"
+      2: "Team aware of calibrated language and Admiralty/NATO ratings; <50% of judgments apply them"
+      3: ">=90% of key judgments use calibrated probability language; >=90% of sources have reliability/credibility ratings"
+      4: "Template enforces calibrated language and source rating; peer review checklist references ICD 203"
+      5: "Forecast calibration measured (Brier score or equivalent); miscalibration drives retraining"
+
+  - id: T1-Q5
+    tier: 1
+    criterion: calibrated_language
+    type: checklist
+    question: "Has the team adopted a published calibrated probability scale (e.g., ODNI 8-level)?"
+    question_audit: "Has a calibrated probability scale been adopted and documented?"
+    scoring:
+      yes_value: 3
+
+  # --- Collection Management Framework (CMF) ---
+  - id: T1-Q6
+    tier: 1
+    criterion: collection_management
+    type: scale
+    question: "Rate the maturity of your Collection Management Framework (CMF)."
+    question_audit: "Rate the maturity of the assessed team's CMF."
+    options:
+      1: "No CMF; no mapping from sources to PIRs"
+      2: "Draft CMF exists in spreadsheet form; <30% of sources mapped to PIRs"
+      3: "Documented CMF with >=80% of sources mapped to PIRs/SIRs; coverage gaps visible"
+      4: "Quarterly CMF review; CRAAP ratings on >=80% of sources; passive-vs-active collection tagged"
+      5: "Per-PIR collection plan; source cost/coverage/ROI tracked; defensible to leadership and auditors"
+
+  # ============================================================
+  # TIER 2 — OPERATIONAL: SOC / DE / IR / Hunt Integration
+  # ============================================================
+
+  # --- Threat Intelligence Platform and IOC Pipeline ---
+  - id: T2-Q1
+    tier: 2
+    criterion: tip_and_ioc_pipeline
+    type: scale
+    question: "Rate the maturity of your Threat Intelligence Platform (TIP) and IOC pipeline."
+    question_audit: "Rate the assessed team's TIP and IOC pipeline maturity."
+    options:
+      1: "No TIP; IOCs in spreadsheets, emails, or hand-updated SIEM watchlists"
+      2: "TIP deployed but underutilized; <50% of feeds ingested; manual SIEM push"
+      3: ">=5 feeds ingested via STIX/TAXII or API; SIEM push automated; IOC expiration policy configured"
+      4: "Closed-loop SOC feedback adjusts source fidelity scoring; high-fidelity indicators can trigger SOAR blocking"
+      5: "TIP is the single source of truth across SIEM/EDR/SOAR/firewalls; pipeline SLOs monitored; analyst pivoting standard"
+
+  - id: T2-Q2
+    tier: 2
+    criterion: tip_and_ioc_pipeline
+    type: checklist
+    question: "Is a Threat Intelligence Platform deployed and actively used by analysts?"
+    question_audit: "Is a TIP deployed and actively used?"
+    scoring:
+      yes_value: 3
+
+  # --- Detection Engineering Handoff ---
+  - id: T2-Q3
+    tier: 2
+    criterion: detection_engineering_handoff
+    type: scale
+    question: "Rate the maturity of the CTI-to-Detection-Engineering handoff."
+    question_audit: "Rate the assessed team's DE handoff."
+    options:
+      1: "Ad-hoc interaction; verbal or email requests; no backlog; no provenance on shipped rules"
+      2: "<1 formal request per month; no cadence; no template"
+      3: ">=1 CTI-to-DE cadence per month; standard request template (threat, TTP, ATT&CK ID, suggested logic); backlog visible to both teams"
+      4: "CTI-driven detections tagged in the Detection-as-Code repo; hit rate and FP rate measured against CTI rules"
+      5: "Lead time from CTI request to deployed detection measured; ATT&CK coverage map auto-generated; CTI influences DE roadmap"
+
+  # --- Collaboration with the Threat Hunting Team ---
+  # NOTE: This criterion assumes the organization has a dedicated Threat Hunting
+  # team separate from CTI. The question measures how well CTI partners with
+  # that team (hypothesis feed, enriched intel packages, return feedback), not
+  # whether CTI runs hunts itself.
+  - id: T2-Q4
+    tier: 2
+    criterion: threat_hunting_integration
+    type: scale
+    question: "Rate the maturity of CTI's partnership with the Threat Hunting team."
+    question_audit: "Rate the assessed team's CTI-Hunt partnership maturity."
+    options:
+      1: "No structured relationship; CTI does not feed hunt ideas; hunt findings do not flow back"
+      2: "Informal, ad-hoc interaction (<1 structured handoff per month); occasional IOC or actor-name email"
+      3: "Recurring CTI-to-Hunt cadence (>=monthly); CTI submits hunt hypothesis abstracts scoped against PIRs and ATT&CK; hunts target Pyramid-of-Pain TTPs and tools"
+      4: "Hunt findings flow back and update threat profile, PIRs, and CMF; CTI provides enriched intel packages (actor, Diamond Model, ATT&CK Navigator layers) to scope hunts"
+      5: "CTI-Hunt partnership measured (% hunts sourced by CTI, % producing downstream artifact, yield YoY); retrospectives on cadence"
+
+  - id: T2-Q5
+    tier: 2
+    criterion: threat_hunting_integration
+    type: checklist
+    question: "Does a recurring (at least monthly) working cadence exist between CTI and the Threat Hunting team?"
+    question_audit: "Is there a recurring CTI-Hunt working cadence?"
+    scoring:
+      yes_value: 3
+
+  # --- Incident Response Enrichment ---
+  - id: T2-Q6
+    tier: 2
+    criterion: incident_response_enrichment
+    type: scale
+    question: "Rate the maturity of CTI enrichment for Incident Response."
+    question_audit: "Rate the assessed team's IR enrichment."
+    options:
+      1: "CTI involved in <30% of major incidents; IR analysts self-serve for context"
+      2: "Ad-hoc enrichment when asked; not tracked; no SLA"
+      3: ">=90% of high-severity incidents enriched (actor, TTPs, campaign, prior observations); named CTI on-call liaison"
+      4: "Automated enrichment via TIP/SOAR on ticket creation; ATT&CK mapping on >=80% of IR cases; Diamond Model applied"
+      5: "Post-incident CTI output drives PIRs, detection backlog, and threat profile; MTTD/MTTR attribution measured where possible"
+
+  # ============================================================
+  # TIER 3 — ADVANCED: Telco-Specific Stakeholder Support + Measurement
+  # ============================================================
+
+  # --- Vulnerability and Exploit Intelligence ---
+  - id: T3-Q1
+    tier: 3
+    criterion: vulnerability_and_exploit_intel
+    type: scale
+    question: "Rate the maturity of CTI support to Vulnerability Management for telco stack."
+    question_audit: "Rate the assessed team's VM support for telco stack."
+    options:
+      1: "No CTI input to VM prioritization; VM prioritizes on CVSS alone"
+      2: "Reactive alerts on viral CVEs only; no cadence; no telco-stack tagging"
+      3: "Recurring VM brief (bi-weekly or monthly); CVEs tagged for relevance to telco tech stack (RAN, core, transport, OSS/BSS, hyperscaler, CPE)"
+      4: "EPSS, exploit-in-the-wild observation, and underground chatter integrated; telco protocol vulns (SS7, Diameter, GTP, 5G) tracked; CTI modifiers feed VM prioritization"
+      5: "CTI-driven score is the primary VM signal for externally-facing assets; predictive advisories issued where responsible; post-patch verification tracked"
+
+  # --- Telco Fraud Intelligence ---
+  - id: T3-Q2
+    tier: 3
+    criterion: telco_fraud_intel
+    type: scale
+    question: "Rate the maturity of CTI support to the Fraud team (smishing, SIM swap, ATO, brand)."
+    question_audit: "Rate the assessed team's Fraud support."
+    options:
+      1: "No Fraud engagement"
+      2: "Occasional sharing of smishing samples or actor names; no cadence; no partnership"
+      3: "Recurring Fraud cadence covering smishing kits, SIM swap, ATO tooling, number-porting abuse, and brand impersonation; RFI intake defined"
+      4: "Automated brand-impersonation monitoring (domain squatting, malvertising, lookalike apps); smishing kit repository; indicators flow to SOC and Fraud detection"
+      5: "Cross-carrier intelligence sharing on fraud actors; takedown cadence in place; fraud prevention dollar impact attributed where possible"
+
+  - id: T3-Q3
+    tier: 3
+    criterion: telco_fraud_intel
+    type: checklist
+    question: "Is there a recurring cadence between CTI and the Fraud team?"
+    question_audit: "Does a recurring CTI-Fraud cadence exist?"
+    scoring:
+      yes_value: 3
+
+  # --- Third-Party and Supply-Chain Intelligence ---
+  - id: T3-Q4
+    tier: 3
+    criterion: third_party_and_supply_chain
+    type: scale
+    question: "Rate the maturity of CTI support to Third-Party Risk Management."
+    question_audit: "Rate the assessed team's TPRM support."
+    options:
+      1: "No third-party monitoring"
+      2: "Reactive on major vendor breaches only; no monitored vendor list"
+      3: "Top 20-50 third parties monitored (equipment vendors, roaming partners, CPE suppliers, cloud/SaaS, interconnect carriers); recurring TPRM brief; breach intake path documented"
+      4: "TPRM-platform integration (or structured handoff) with automated vendor-breach alerting; supply-chain IOC tracking; geopolitical shifts surfaced"
+      5: "CTI contributes to M&A / procurement due diligence; roaming and interconnect partner risks inform network segmentation decisions"
+
+  # --- Cyber Threat Landscape Reporting ---
+  - id: T3-Q5
+    tier: 3
+    criterion: threat_landscape_reporting
+    type: scale
+    question: "Rate the maturity of your recurring Cyber Threat Landscape (CTL) product."
+    question_audit: "Rate the assessed team's CTL product maturity."
+    options:
+      1: "No recurring CTL product"
+      2: "Irregular one-off reports; <4 per year; no consistent structure or tiering"
+      3: "CTL delivered at least quarterly on a published schedule; ENISA-style methodology; tactical / operational / strategic tiering distinguishable"
+      4: "Tiered audiences defined (CISO, SOC, VM); stakeholder feedback solicited and logged; trend view across editions maintained"
+      5: "Strategic CTL drives CISO/CIO decisions; operational CTL drives hunt and detection backlogs; annual retrospective on forecast hits and misses"
+
+  # ============================================================
+  # TIER 4 — LEADING: Strategic, Anticipatory, Measured
+  # ============================================================
+
+  # --- Strategic Intelligence to Leadership ---
+  - id: T4-Q1
+    tier: 4
+    criterion: strategic_intelligence_to_leadership
+    type: scale
+    question: "Rate the maturity of strategic intelligence delivered to CISO and senior leadership."
+    question_audit: "Rate the assessed team's strategic leadership briefing."
+    options:
+      1: "No strategic briefing cadence with CISO or senior leaders"
+      2: "Occasional ad-hoc contribution to CISO decks; no standing product"
+      3: "Quarterly strategic brief produced in non-technical language with clear enterprise implications"
+      4: "Strategic brief informs risk register updates and security-investment decisions; Canadian regulatory context (CRTC, CCCS, Bill C-26) synthesized"
+      5: "Standing input to annual enterprise strategy and board-level cyber-risk discussions; products survive external / regulator scrutiny"
+
+  # --- Structured Analytic Techniques (SATs) ---
+  - id: T4-Q2
+    tier: 4
+    criterion: structured_analytic_techniques
+    type: scale
+    question: "Rate your team's use of Structured Analytic Techniques (ACH, Key Assumptions Check, Pre-Mortem, etc.)."
+    question_audit: "Rate the assessed team's SAT use."
+    options:
+      1: "Analysts unfamiliar with SATs; no SAT training or artifacts"
+      2: "Awareness of SATs conceptually; <10% of major products show SAT application"
+      3: ">=80% of major products (high-impact assessments, attribution claims, strategic forecasts) show explicit SAT application"
+      4: "Team repertoire of >=4 SATs; SAT selection guided by the analytic question; peer review checks SAT appropriateness"
+      5: "SATs are a trained competency; bias countermeasures are part of the culture; annual SAT refresher; retrospectives on SAT-driven decisions"
+
+  # --- Attributable Outcomes and Impact Metrics ---
+  - id: T4-Q3
+    tier: 4
+    criterion: attributable_outcomes
+    type: scale
+    question: "Rate your ability to attribute outcomes (detections, hunts, incidents, decisions) to CTI products."
+    question_audit: "Rate the assessed team's outcome attribution."
+    options:
+      1: "No outcome attribution"
+      2: "Anecdotal success stories only; not systematically captured"
+      3: "Outcome log maintained; >=5 outcomes per quarter (detections, hunts, incidents, risk-register changes, procurement decisions)"
+      4: "Outcome KPIs (% detections attributable to CTI, MTTR reduction, fraud $ prevented, vendor changes driven by CTI) in quarterly leadership pack"
+      5: "Outcome data drives budget and headcount decisions; ROI metric published; investment-vs-outcome ratios tracked"
+
+  - id: T4-Q4
+    tier: 4
+    criterion: attributable_outcomes
+    type: checklist
+    question: "Does CTI report outcome metrics to leadership at least quarterly?"
+    question_audit: "Are outcome metrics reported to leadership quarterly or better?"
+    scoring:
+      yes_value: 4
+
+  # --- Forecast Calibration ---
+  - id: T4-Q5
+    tier: 4
+    criterion: forecast_calibration
+    type: scale
+    question: "Rate the maturity of forecast calibration tracking for your analytic products."
+    question_audit: "Rate the assessed team's forecast calibration."
+    options:
+      1: "Forecasts are not tracked; no retrospective check on accuracy"
+      2: "Occasional retrospective on major assessments only"
+      3: "All forecasts with confidence statements logged with resolution criteria; quarterly review of resolved forecasts"
+      4: "Calibration score (Brier or equivalent) computed; errors drive retraining or process changes"
+      5: "Calibration reported alongside output metrics; year-over-year improvement target committed and tracked"
+
+  # ============================================================
+  # ENRICHMENT D1 — TRADECRAFT AND ANALYST CAPABILITY
+  # ============================================================
+
+  - id: E1-Q1
+    tier: enrichment_tradecraft
+    criterion: icd203_adherence
+    type: scale
+    question: "Rate your team's adherence to ICD 203 analytic tradecraft standards."
+    question_audit: "Rate the assessed team's ICD 203 adherence."
+    options:
+      1: "Team unfamiliar with ICD 203 / SANS playbook-equivalent standards"
+      2: "Lead aware; no analyst-level training; no consistent application"
+      3: "All analysts trained on ICD 203 (or SANS-equivalent); products spot-checked for adherence"
+      4: "Peer review checklist uses ICD 203 standards 1-7 as pass gates"
+      5: "All nine ICD 203 standards measured or reviewed; standard 8 tracked via forecast calibration"
+
+  - id: E1-Q2
+    tier: enrichment_tradecraft
+    criterion: framework_literacy
+    type: scale
+    question: "Rate team fluency with MITRE ATT&CK, the Diamond Model, and the Cyber Kill Chain."
+    question_audit: "Rate the assessed team's framework fluency."
+    options:
+      1: "<50% of analysts confidently use ATT&CK, Diamond, or Kill Chain in analysis"
+      2: "ATT&CK referenced occasionally; Diamond and Kill Chain rarely used"
+      3: ">=90% of behavioral products use ATT&CK tactic/technique IDs; Diamond/Kill Chain used where appropriate"
+      4: "ATT&CK Navigator layers published for major campaigns/actors; Diamond diagrams in incident and campaign reports"
+      5: "Live ATT&CK coverage heatmap linked to PIRs; framework outputs feed detection coverage mapping and hunt prioritization"
+
+  - id: E1-Q3
+    tier: enrichment_tradecraft
+    criterion: peer_review_process
+    type: scale
+    question: "Rate the maturity of your peer review process for finished products."
+    question_audit: "Rate the assessed team's peer review process."
+    options:
+      1: "No peer review; analysts self-publish"
+      2: "Informal peer review; <50% of products reviewed"
+      3: ">=90% of finished products peer-reviewed; named reviewer; written review criteria"
+      4: "Peer review uses a checklist tied to ICD 203, template, calibrated language, and source rating; review SLA tracked"
+      5: "Peer review findings drive training and template improvements; cross-team review (with DE or peer CTI teams) on cadence"
+
+  - id: E1-Q4
+    tier: enrichment_tradecraft
+    criterion: peer_review_process
+    type: checklist
+    question: "Are all finished intelligence products peer-reviewed before release?"
+    question_audit: "Are all finished products peer-reviewed before release?"
+    scoring:
+      yes_value: 3
+
+  # ============================================================
+  # ENRICHMENT D2 — GOVERNANCE, LEGAL, ETHICS, AND IMPROVEMENT
+  # ============================================================
+
+  - id: E2-Q1
+    tier: enrichment_governance
+    criterion: legal_regulatory_review
+    type: scale
+    question: "Rate the maturity of legal / regulatory review over CTI sources and techniques (PIPEDA, CASL, CRTC, Bill C-26 CCSPA)."
+    question_audit: "Rate the assessed team's legal / regulatory review."
+    options:
+      1: "No review of sources or techniques against Canadian legal/regulatory constraints"
+      2: "Awareness-level only; analyst self-check; no formal process"
+      3: "Sources screened against PIPEDA for personal-information collection; active-collection techniques have documented legal sign-off"
+      4: "Annual review with privacy/legal partners; written and approved passive-vs-active collection posture"
+      5: "Regulatory alignment tracked (CRTC expectations, Bill C-26 CCSPA obligations); CTI participates in breach-notification and regulatory-reporting workflows"
+
+  - id: E2-Q2
+    tier: enrichment_governance
+    criterion: external_sharing
+    type: scale
+    question: "Rate your team's participation in external sharing communities (CCTX, trust groups, CCCS partnership)."
+    question_audit: "Rate the assessed team's external sharing participation."
+    options:
+      1: "No memberships"
+      2: "Passive membership in 1-2 groups; no shares in the last 12 months"
+      3: "Active membership in CCTX and/or relevant trust groups; shares per quarter; TLP and sharing constraints understood"
+      4: "Material bi-directional sharing (>=1 share per month); partner-attributable value captured"
+      5: "Recognized sector contributor; leadership role held (working-group chair, framework author, or similar)"
+
+  - id: E2-Q3
+    tier: enrichment_governance
+    criterion: continuous_improvement
+    type: scale
+    question: "Rate the maturity of your CTI self-assessment and continuous improvement cadence."
+    question_audit: "Rate the assessed team's self-assessment cadence."
+    options:
+      1: "No self-assessment in the last 24 months"
+      2: "One-off maturity assessment; not repeated"
+      3: "TIBMM (or equivalent) run annually; gap list maintained"
+      4: "Bi-annual full TIBMM plus quarterly KPI check-ins; gaps tied to a roadmap with owners and target dates"
+      5: "TIBMM scores reported to leadership alongside operational KPIs; year-over-year trend visible; improvement targets committed"

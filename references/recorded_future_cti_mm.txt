@@ -1,0 +1,106 @@
+1) What is your organization’s capacity to resource and specialize in TI use cases?
+Note: This can be in-house resources, managed services, or a combination.
+
+
+
+We leverage SOC/security analysts to manage threat intelligence when necessary.
+
+We have a few TI resources who can focus on TI use cases, such as threat actor tracking.
+
+We have dedicated a cyber threat intelligence (CTI) team and resources.
+
+We use a mix of dedicated TI resources and AI/autonomous intelligence capabilities (e.g., YARA and Sigma).
+
+
+
+
+2) What is your organization's capability to effectively serve diverse threat intelligence stakeholders and consumers?
+
+Threat intelligence is primarily consumed by the security/CTI team itself with minimal external distribution.
+
+Intelligence is used by security teams, IT operations, risk management, and some business stakeholders with tailored delivery methods.
+
+Comprehensive intelligence consumption across all organizational levels including executives, business units, legal, compliance, with audience-specific insights.
+
+Tailored and personalized intelligence available to all stakeholders provided autonomously and delivered at the right time.
+
+
+
+
+3) What is your organization's capability to deploy personnel with the expertise and skills to identify and respond to threats across the lifecycle spectrum?
+Note: This can be in-house resources, managed services, or a combination.
+
+Limited to personnel with incident response skills who can only identify and analyze threats after a ticket is escalated.
+
+Advanced threat intelligence analysts and hunters with deep expertise in threat landscape analysis, adversary TTPs, and predictive analysis.
+
+Elite-level threat intelligence specialists with advanced analytical skills, adversary behavior modeling expertise, and strategic forecasting abilities.
+
+Combination of threat intelligence analysts with self-directing threat intelligence response to autonomously reduce risk across the threat lifecycle spectrum.
+
+
+4) What is your organization's capability to align threat intelligence activities with strategic security needs?
+
+Limited to responding to immediate threats and correlation alerts.
+
+Capable of using actionable intelligence to improve SOC/IR efficiency, conduct threat hunting, and track specific threat actors.
+
+Using trends and developing threats to understand the threat landscape and how it applies to the organization for strategic decision making.
+
+Capable of aligning threat intelligence activities autonomously based on business priorities, threat opportunities, and threat intent.
+
+
+5) 
+What is your organization's capability to identify and respond to threats across the entire threat lifecycle?
+
+Reactive threat detection capability only.
+
+Active detection capability to prevent and detect.
+
+Anticipatory and predictive capability to see emerging threats before they materialize.
+
+Autonomously identify and respond to threats with minimal human intervention.
+
+6) How often do you perform threat hunts?
+
+We don't do threat hunts; there aren't enough people or time.
+
+We do threat hunts ad-hoc when we have time.
+
+We have scheduled, recurring threat hunts that are weekly, monthly, or quarterly.
+
+We have continual, automated, and always-on daily threat hunts.
+
+
+
+7) What type of intelligence and threat visibility do your data sources provide?
+
+Indicators such as suspicious domains, hashes, bad IPs, or malicious code.
+
+Comprehensive internal and external visibility - threat actors, IOCs, TTPs for the organization.
+
+Full 360 intelligence that provides visibility externally and internally including third parties, geopolitical, emerging threat trends, and expert analysis.
+
+Intelligence that can be trusted and used for automated proactive blocking for high risk/high threat and imminent threat IOCs.
+
+
+8) Where have you automated your TI processes?
+
+Automated fundamental tasks like data aggregation, comparison, labeling, and contextualization.
+
+Automated correlation of threat data, production of risk scores, and identifying false positives.
+
+Automated information sharing with other teams such as security operations and incident response teams, threat analysts, fraud prevention teams, vulnerability management specialists, third-party risk managers, and brand defenders.
+
+Automated creation of YARA and Sigma rules, threat hunting, and deployment of controls into security tools.
+
+
+9) What is your organization's capability to integrate threat intelligence across your security technology stack?
+
+Rely on one-way data feeds.
+
+Bi-directional data exchange with basic correlation.
+
+Rich context sharing with automated enrichment.
+
+Taking actions in other tools and platforms such as prioritizing, detecting, and preventing threats.
